@@ -1,6 +1,7 @@
 const addButton = document.querySelector("#add");
 
-let editing;
+let emptyNote;
+let previousEmptyNote;
 
 const upadteLSData = () => {
   const textAreaData = document.querySelectorAll("textarea"); // Since we will store data of all the notes so we are using "querySelectorAll"
@@ -14,16 +15,33 @@ const upadteLSData = () => {
   localStorage.setItem("notes", JSON.stringify(notes));
 };
 
-
 // Beginning of addNewNote
 
-function addNewNote (text = "") {  
-    const note = document.createElement("div"); // This is to add a HTML element to our main HTML page
+// function emptyNoteOperation() {
+//     document.querySelectorAll("textarea").lastElementChild.focus();
+// }
+
+function addNewNote(text = "") {
+  let editing;
+
+  // Condition to stop user from generating duplicate empty note
+  if (previousEmptyNote && !text) {
+    alert("You have alredy created an empty note...let's put some thoughts into it 👉");
+
+    setTimeout(() => {
+      const data = document.querySelectorAll("textarea");
+      data[data.length - 1].focus();
+      window.scrollTo(0, document.body.clientHeight);
+    }, 0);
+
+    return;
+  }
+
+  const note = document.createElement("div"); // This is to add a HTML element to our main HTML page
 
   note.classList.add("note"); // To add a class to the div created from JS
   //   fas fa-check
   //   <i class="fas edit__icon fa-check"></i>
-
 
   const htmlData = `
     <div class="operation">
@@ -64,11 +82,22 @@ function addNewNote (text = "") {
   const mainDiv = note.querySelector(".main");
   const textArea = note.querySelector("textarea");
 
+  // To focus on the TEXTAREA field when new note is added. We need to use "setTimeout()" method to focus on text area initially
+  if (!textArea.value) {
+    setTimeout(() => {
+      textArea.focus();
+    }, 0);
+  }
+
   // Deleting the node
   delButton.addEventListener("click", () => {
     note.remove(); // This to delete the complete note within which the delete button is present
 
     upadteLSData();
+
+    if (emptyNote) {
+      emptyNote = !emptyNote;
+    }
   });
 
   // Toggle using edit button
@@ -93,9 +122,7 @@ function addNewNote (text = "") {
       editIcon.classList.remove("fa-check");
       editIcon.classList.add("fa-edit");
     }
-
   });
-
 
   textArea.addEventListener("change", (event) => {
     const value = event.target.value;
@@ -103,20 +130,22 @@ function addNewNote (text = "") {
 
     upadteLSData();
 
-    window.scrollTo(0, document.body.clientHeight);
+    emptyNote = textArea.value ? false : true;
   });
 
   // In the .addEventListener(event, function) => the event 'change' is fired when ever there is change in the textarea(It changes after we write the complete text and then click outside). While the event 'input' is fired whenever we enter any character(i.e alphabet, letter, etc.).
 
   document.body.appendChild(note); // The "appendChild()" method appends a node as the last child of a node
   // Here the previous line means we want to append/add the "note" div to the body of the html as the last child(i.e. it will render at the end of the webpage).
+  
 
-    window.scrollTo(0, document.body.clientHeight); // Scrolling to bottom of page when new note is entered
+  setTimeout(()=> {
+      window.scrollTo(0, document.body.clientHeight); // Scrolling to bottom of page when new note is entered
+  }, 0);
+  // Outside "setTimeout()" sometimes the scroll doesn't work properly but inside "setTimeout()" it works properly.
 
-};
+}
 // End of addNewNote
-
-
 
 // Getting data back from localStorgae
 const notes = JSON.parse(localStorage.getItem("notes"));
@@ -125,7 +154,10 @@ if (notes) {
   notes.forEach((note) => addNewNote(note));
 }
 
-addButton.addEventListener("click", () => addNewNote()); // The addNewNote function will be called when ever the event "click" is executed i.e whenever the button(#add) is clicked
-
+addButton.addEventListener("click", () => {
+  previousEmptyNote = emptyNote;
+  emptyNote = true;
+  return addNewNote();
+}); // The addNewNote function will be called when ever the event "click" is executed i.e whenever the button(#add) is clicked
 
 // The localStorage and session Storage properties allow to save key/value pairs in a web browser. The localStorage object stores data with no expiration date. The data will not be deleted when the browser is closed, and will be available later on.
