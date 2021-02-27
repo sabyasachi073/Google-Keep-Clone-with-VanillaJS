@@ -1,5 +1,6 @@
 const addButton = document.querySelector("#add");
-let editing = false;
+
+let editing;
 
 const upadteLSData = () => {
   const textAreaData = document.querySelectorAll("textarea"); // Since we will store data of all the notes so we are using "querySelectorAll"
@@ -12,11 +13,13 @@ const upadteLSData = () => {
   localStorage.setItem("notes", JSON.stringify(notes));
 };
 
-const addNewNote = (text = "") => {
-  const note = document.createElement("div"); // This is to add a HTML element to our main HTML page
+const addNewNote = (text = "") => {  
+    const note = document.createElement("div"); // This is to add a HTML element to our main HTML page
+
   note.classList.add("note"); // To add a class to the div created from JS
   //   fas fa-check
   //   <i class="fas edit__icon fa-check"></i>
+
 
   const htmlData = `
     <div class="operation">
@@ -49,6 +52,8 @@ const addNewNote = (text = "") => {
   // Getting the references
   const editButton = note.querySelector(".edit"); // To get the reference of the "edit" button which we have created inside the "note" div in the JS file.
   // Here, we can't write here "document.querySelector('.edit)" because it is not inside the our main document i.e our webpage rather we will render note dynamically within which the "edit" button is present. So we need to use "note.querySelector('.edit')".
+
+  editing = text ? false : true; // If there was already text available in note then it would be true else false
 
   const editIcon = note.querySelector(".edit__icon");
   const delButton = note.querySelector(".delete");

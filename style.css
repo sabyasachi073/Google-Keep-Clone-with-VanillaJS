@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap'); */
 
 * {
   margin: 0;
@@ -15,7 +14,6 @@ html {
 body {
   background-color: #f4f7f8;
   font-family: "Raleway", sans-serif;
-  /* font-family: 'Poppins', sans-serif; */
   display: flex;
   flex-wrap: wrap;
 }
