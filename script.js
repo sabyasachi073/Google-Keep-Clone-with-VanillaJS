@@ -21,7 +21,7 @@ const addNewNote = (text = "") => {
   const htmlData = `
     <div class="operation">
         <button class="edit">
-            <i class="fas edit__icon fa-edit"></i>
+            <i class="fas edit__icon ${text ? "fa-edit" : "fa-check"}"></i>
         </button>
         <button class="delete"><i class="fas fa-trash-alt"></i></button>
     </div>
@@ -73,7 +73,6 @@ const addNewNote = (text = "") => {
 
     textArea.classList.toggle("hidden");
 
-
     // Changing the Edit icon on clicking the button
     editing = !editing;
 
@@ -86,7 +85,7 @@ const addNewNote = (text = "") => {
     }
   });
 
-  
+
   textArea.addEventListener("change", (event) => {
     const value = event.target.value;
     mainDiv.innerHTML = value; // Adding the value enter in the textarea to the ".mainDiv"
