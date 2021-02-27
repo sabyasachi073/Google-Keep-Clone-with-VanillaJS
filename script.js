@@ -7,13 +7,17 @@ const upadteLSData = () => {
   const notes = [];
 
   textAreaData.forEach((note) => {
-    return notes.push(note.value);
+    return notes.push(note.value); // It pushes the element at the end
+    // return notes.unshift(note.value);
   });
 
   localStorage.setItem("notes", JSON.stringify(notes));
 };
 
-const addNewNote = (text = "") => {  
+
+// Beginning of addNewNote
+
+function addNewNote (text = "") {  
     const note = document.createElement("div"); // This is to add a HTML element to our main HTML page
 
   note.classList.add("note"); // To add a class to the div created from JS
@@ -84,10 +88,12 @@ const addNewNote = (text = "") => {
     if (editing) {
       editIcon.classList.remove("fa-edit");
       editIcon.classList.add("fa-check");
+      textArea.focus();
     } else {
       editIcon.classList.remove("fa-check");
       editIcon.classList.add("fa-edit");
     }
+
   });
 
 
@@ -96,13 +102,21 @@ const addNewNote = (text = "") => {
     mainDiv.innerHTML = value; // Adding the value enter in the textarea to the ".mainDiv"
 
     upadteLSData();
+
+    window.scrollTo(0, document.body.clientHeight);
   });
 
   // In the .addEventListener(event, function) => the event 'change' is fired when ever there is change in the textarea(It changes after we write the complete text and then click outside). While the event 'input' is fired whenever we enter any character(i.e alphabet, letter, etc.).
 
   document.body.appendChild(note); // The "appendChild()" method appends a node as the last child of a node
   // Here the previous line means we want to append/add the "note" div to the body of the html as the last child(i.e. it will render at the end of the webpage).
+
+    window.scrollTo(0, document.body.clientHeight); // Scrolling to bottom of page when new note is entered
+
 };
+// End of addNewNote
+
+
 
 // Getting data back from localStorgae
 const notes = JSON.parse(localStorage.getItem("notes"));
@@ -111,6 +125,7 @@ if (notes) {
   notes.forEach((note) => addNewNote(note));
 }
 
-addButton.addEventListener("click", () => addNewNote()); // The addNewNote function will be called when ever the event "click" is executed i.e whenever the button(#add) is clicked.
+addButton.addEventListener("click", () => addNewNote()); // The addNewNote function will be called when ever the event "click" is executed i.e whenever the button(#add) is clicked
+
 
 // The localStorage and session Storage properties allow to save key/value pairs in a web browser. The localStorage object stores data with no expiration date. The data will not be deleted when the browser is closed, and will be available later on.
